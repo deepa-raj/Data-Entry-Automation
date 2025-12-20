@@ -1,10 +1,10 @@
 
-from selenium.common import ElementClickInterceptedException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 import time
 from bs4 import BeautifulSoup
+import smtplib
 import requests
 import lxml
 from dotenv import load_dotenv
@@ -87,3 +87,27 @@ for n in range(len(all_links)):
     link.send_keys(all_links[n])
     time.sleep(1)
     submit.click()
+
+
+MY_EMAIL = os.getenv("EMAIL_ADDRESS")
+PASSWORD = os.getenv("EMAIL_PASSWORD")
+TO_EMAIL = os.getenv("TO_EMAIL")
+SHEET_URL = os.getenv("GOOGLE_SHEET_URL")
+
+def send_mail():
+    with smtplib.SMTP("smtp.gmail.com") as connection:
+        connection.starttls()
+        connection.login(user=MY_EMAIL, password=PASSWORD)
+        connection.sendmail(from_addr=MY_EMAIL,
+                            to_addrs=TO_EMAIL,
+                            msg=f"Subject:Data Updation Completed\n\n"
+                            "Subject:Data Updation Completed\n\n"
+                "Your rental data has been successfully submitted via automation.\n\n"
+                "You can view the collected responses here:\n"
+                f"{SHEET_URL}\n\n"
+                "Regards,\n"
+                "Automation System")
+
+
+send_mail()
+
